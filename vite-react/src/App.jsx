@@ -86,7 +86,7 @@ if (!customElements.get("my-react-app")) {
         }
     }
 
-    customElements.define("my-react-app", MyWebComponent);
+    customElements.define("infinyon-vite-react-template-0-0-0", MyWebComponent);
 }
 
 export default App;
