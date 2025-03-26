@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
+import styleText from "./App.css?inline"
 
 function App() {
     const [count, setCount] = useState(0);
@@ -39,16 +39,35 @@ if (!customElements.get("my-react-app")) {
     class MyWebComponent extends HTMLElement {
         constructor() {
             super();
+
             this.root = this.attachShadow({ mode: "open" });
+            this.root.innerHTML = `
+              <!-- Styles are scoped -->
+              <style>
+                ${styleText}
+              </style>
+              <div>
+                <p>Hello World</p>
+              </div>
+            `;
         }
 
         connectedCallback() {
             const mountPoint = document.createElement("div");
+
+            // Inject styles into the Shadow DOM
+            const style = document.createElement("style");
+            style.textContent = `
+                @import url('./App.css'); /* Ensure animations and styles are loaded */
+            `;
+
+            this.root.appendChild(style);
             this.root.appendChild(mountPoint);
+
             createRoot(mountPoint).render(
                 <StrictMode>
                     <App />
-                </StrictMode>,
+                </StrictMode>
             );
         }
     }
