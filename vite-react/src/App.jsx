@@ -1,12 +1,23 @@
-import { StrictMode } from 'react'
+import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from "react-dom/client";
-import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import styleText from "./App.css?inline"
+import styleText from "./App.css?inline";
 
-function App() {
+function App({ wsUrl }) {
     const [count, setCount] = useState(0);
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+        const ws = new WebSocket(wsUrl);
+        ws.onmessage = (event) => {
+            setEvents((prevEvents) => [...prevEvents, event.data]);
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [wsUrl]);
 
     return (
         <div id="main">
@@ -30,6 +41,15 @@ function App() {
             <p className="read-the-docs">
                 Click on the Vite and React logos to learn more
             </p>
+
+            <div>
+                <h3>WebSocket Events:</h3>
+                <ul>
+                    {events.map((event, index) => (
+                        <li key={index}>{event}</li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 }
@@ -51,19 +71,16 @@ if (!customElements.get("my-react-app")) {
 
         connectedCallback() {
             const mountPoint = document.createElement("div");
-
-            // Inject styles into the Shadow DOM
-            const style = document.createElement("style");
-            style.textContent = `
-                @import url('./App.css'); /* Ensure animations and styles are loaded */
-            `;
-
-            this.root.appendChild(style);
             this.root.appendChild(mountPoint);
+
+            const wsUrl = this.getAttribute("ws-gateway-url");
+            if (!wsUrl) {
+                throw new Error("ws-gateway-url attribute is required");
+            }
 
             createRoot(mountPoint).render(
                 <StrictMode>
-                    <App />
+                    <App wsUrl={wsUrl} />
                 </StrictMode>
             );
         }
