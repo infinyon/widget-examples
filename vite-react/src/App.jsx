@@ -55,7 +55,7 @@ function App({ wsUrl }) {
 }
 
 // Define the Web Component inside App.jsx
-if (!customElements.get("infinyon-vite-react-template-0-0-1")) {
+if (!customElements.get("infinyon-vite-react-template-0-0-2")) {
     class MyWebComponent extends HTMLElement {
         constructor() {
             super();
@@ -86,7 +86,7 @@ if (!customElements.get("infinyon-vite-react-template-0-0-1")) {
         }
     }
 
-    customElements.define("infinyon-vite-react-template-0-0-1", MyWebComponent);
+    customElements.define("infinyon-vite-react-template-0-0-2", MyWebComponent);
 }
 
 export default App;
