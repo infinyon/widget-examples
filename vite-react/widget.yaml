@@ -1,0 +1,7 @@
+name: vite-react-template
+organization: infinyon
+version: 0.0.1
+visibility: public
+included:
+  - ./dist/assets
+entry_point: ./dist/assets/start.js
