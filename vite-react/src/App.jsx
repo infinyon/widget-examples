@@ -2,7 +2,7 @@ import { StrictMode, useEffect, useState } from 'react'
 import { createRoot } from "react-dom/client";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import styleText from "./App.css?inline";
+import appStyle from "./App.css?inline";
 
 function App({ wsUrl }) {
     const [count, setCount] = useState(0);
@@ -64,13 +64,15 @@ if (!customElements.get("infinyon-vite-react-template-0-0-3")) {
             this.root.innerHTML = `
               <!-- Styles are scoped -->
               <style>
-                ${styleText}
+                ${appStyle}
               </style>
             `;
         }
 
         connectedCallback() {
             const mountPoint = document.createElement("div");
+            mountPoint.id = "root";
+
             this.root.appendChild(mountPoint);
 
             const wsUrl = this.getAttribute("ws-gateway-url");
